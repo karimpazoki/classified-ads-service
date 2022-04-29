@@ -23,8 +23,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'email',
         'gender',
         'mobile',
-        'country',
-        'city',
+        'city_id',
     ];
 
     /**
@@ -35,4 +34,24 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * types of users gender
+     *
+     * @var string[]
+     */
+    const GENDER = [
+        "male" => "male",
+        "female" => "female",
+    ];
+    
+    /**
+     * retrurns genders
+     *
+     * @return string[]
+     */
+    public function genders(): array
+    {
+        return self::GENDER;
+    }
 }
