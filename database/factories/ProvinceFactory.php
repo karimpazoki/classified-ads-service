@@ -23,7 +23,6 @@ class ProvinceFactory extends Factory
     {
         return [
             'name' => $this->faker->state,
-            // 'country_id' => $this->faker->rand(1,10),
         ];
     }
 }

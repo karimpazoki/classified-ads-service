@@ -23,7 +23,6 @@ class CityFactory extends Factory
     {
         return [
             'name' => $this->faker->city,
-            // 'Province_id' => $this->faker->numberBetween(1,10),
         ];
     }
 }
