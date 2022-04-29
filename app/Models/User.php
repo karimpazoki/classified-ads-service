@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use App\Models\City;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -53,5 +54,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function genders(): array
     {
         return self::GENDER;
+    }
+
+    public function city()
+    {
+        return $tis->belongsTo(City::class);
     }
 }
