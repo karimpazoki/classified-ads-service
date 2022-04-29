@@ -17,9 +17,9 @@ return new class extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
-            $table->string('email', 255);
+            $table->string('email', 255)->unique();
             $table->string('gender', User::GENDER);
-            $table->string('mobile', 15);
+            $table->string('mobile', 15)->unique();
             $table->foreignId('city_id');
             $table->timestamps();
         });
