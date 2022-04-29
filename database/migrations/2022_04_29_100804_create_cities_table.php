@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name', 255);
             $table->foreignId('province_id');
             $table->timestamps();
+
+            $table->unique(['name', 'province_id']);
         });
     }
 
