@@ -62,6 +62,8 @@ $app->singleton(
 $app->configure('app');
 $app->configure('jwt');
 $app->configure('auth');
+$app->configure('swagger-lume');
+$app->configure('l5-swagger');
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +99,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(\SwaggerLume\ServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
