@@ -10,6 +10,7 @@ use App\Models\City;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\AttributesCategory;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,23 +23,28 @@ class DatabaseSeeder extends Seeder
     {
         Country::factory()
             ->count(2)
-            ->has(Province::factory()
-                ->count(3)
-                ->has(
-                    City::factory()
+            ->has(
+                Province::factory()
                     ->count(3)
-                    ->hasUsers(5)
-                )
+                    ->has(
+                        City::factory()
+                            ->count(3)
+                            ->hasUsers(5)
+                    )
             )
             ->create();
 
         Brand::factory()
             ->count(10)
             ->create();
-        
+
         Category::factory()
             ->count(4)
             ->hasChildren(5)
+            ->create();
+
+        AttributesCategory::factory()
+            ->count(5)
             ->create();
     }
 }
