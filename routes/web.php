@@ -13,6 +13,7 @@
 |
 */
 
+// Auth
 $router->group([
     'prefix' => 'auth'
 ], function ($router) {
@@ -21,3 +22,19 @@ $router->group([
     $router->post('refresh', 'AuthController@refresh');
     $router->get('user', 'AuthController@user');
 });
+
+// Brands
+$router->get('/brand', 'BrandController@index');
+$router->post('/brand', 'BrandController@store');
+$router->get('/brand/{brand}', 'BrandController@show');
+$router->put('/brand/{brand}', 'BrandController@update');
+$router->patch('/brand/{brand}', 'BrandController@update');
+$router->delete('/brand/{brand}', 'BrandController@delete');
+
+//Categories
+$router->get('/category', 'CategoryController@index');
+$router->post('/category', 'CategoryController@store');
+$router->get('/category/{category}', 'CategoryController@show');
+$router->put('/category/{category}', 'CategoryController@update');
+$router->patch('/category/{category}', 'CategoryController@update');
+$router->delete('/category/{category}', 'CategoryController@delete');
