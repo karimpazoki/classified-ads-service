@@ -92,6 +92,6 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($category);
         $category->delete();
-        return $this->success(["category" => $category], "The \"{$category}\" category deleted successfully", Response::HTTP_OK);
+        return $this->success(["category" => $category], "The '{$category->name}' category deleted successfully", Response::HTTP_OK);
     }
 }

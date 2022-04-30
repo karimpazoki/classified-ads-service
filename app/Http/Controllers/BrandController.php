@@ -27,7 +27,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return $this->success(Brand::all());
+        return $this->success(['brands' => Brand::all()]);
     }
 
     /**
@@ -39,7 +39,7 @@ class BrandController extends Controller
      */
     public function show($brand)
     {
-        return $this->success(Brand::findOrFail($brand));
+        return $this->success(['brand' => Brand::findOrFail($brand)]);
     }
 
     /**
@@ -55,7 +55,7 @@ class BrandController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        return $this->success(Brand::create($request->all()), "The brand created successfully", Response::HTTP_CREATED);
+        return $this->success(['brand' => Brand::create($request->all())], "The brand created successfully", Response::HTTP_CREATED);
     }
 
     /**
@@ -75,7 +75,7 @@ class BrandController extends Controller
         $brand = Brand::findOrFail($brand);
         $brand->fill($request->all());
         $brand->save();
-        return $this->success($brand, "The brand updated successfully", Response::HTTP_OK);
+        return $this->success(['brand' => $brand], "The brand updated successfully", Response::HTTP_OK);
     }
 
     /**
@@ -89,7 +89,6 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($brand);
         $brand->delete();
-        return $brand;
-        return $this->success($brand, "The \"{$brand}\" brand deleted successfully", Response::HTTP_OK);
+        return $this->success(['brand' => $brand], "The '{$brand}' brand deleted successfully", Response::HTTP_OK);
     }
 }
