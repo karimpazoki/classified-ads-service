@@ -56,7 +56,7 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'parent_id' => 'integer|exists:attributes_categories,id',
+            'parent_id' => 'integer|exists:categories,id',
         ]);
 
         return $this->success(["category" => Category::create($request->all())], "The category created successfully", Response::HTTP_CREATED);
@@ -74,7 +74,7 @@ class CategoryController extends Controller
     {
         $this->validate($request, [
             'name' => 'string|max:255',
-            'parent_id' => 'integer|exists:attributes_categories,id',
+            'parent_id' => 'integer|exists:categories,id',
         ]);
 
         $category = Category::findOrFail($category);
