@@ -9,6 +9,7 @@ use App\Models\Province;
 use App\Models\City;
 use App\Models\User;
 use App\Models\Brand;
+use App\Models\Category;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,6 +34,11 @@ class DatabaseSeeder extends Seeder
 
         Brand::factory()
             ->count(10)
+            ->create();
+        
+        Category::factory()
+            ->count(4)
+            ->hasChildren(5)
             ->create();
     }
 }
