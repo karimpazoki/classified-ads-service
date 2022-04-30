@@ -54,8 +54,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|string|max:255',
+            'parent_id' => 'integer|exists:attributes_categories,id',
         ]);
 
         return $this->success(["category" => Category::create($request->all())], "The category created successfully", Response::HTTP_CREATED);
@@ -71,8 +72,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $category)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'string|max:255',
+            'parent_id' => 'integer|exists:attributes_categories,id',
         ]);
 
         $category = Category::findOrFail($category);
