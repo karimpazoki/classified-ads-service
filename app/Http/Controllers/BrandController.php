@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Brand;
 use App\Traits\ResponseBuilder;
+use App\Http\Resources\BrandResource;
 
 class BrandController extends Controller
 {
@@ -27,7 +28,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return $this->success(['brands' => Brand::all()]);
+        return $this->success(['brands' => BrandResource::collection(Brand::all())]);
     }
 
     /**
@@ -39,7 +40,7 @@ class BrandController extends Controller
      */
     public function show($brand)
     {
-        return $this->success(['brand' => Brand::findOrFail($brand)]);
+        return $this->success(['brand' => new BrandResource(Brand::findOrFail($brand))]);
     }
 
     /**
@@ -55,7 +56,7 @@ class BrandController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        return $this->success(['brand' => Brand::create($request->all())], "The brand created successfully", Response::HTTP_CREATED);
+        return $this->success(['brand' => new BrandResource(Brand::create($request->all()))], "The brand created successfully", Response::HTTP_CREATED);
     }
 
     /**
@@ -75,7 +76,7 @@ class BrandController extends Controller
         $brand = Brand::findOrFail($brand);
         $brand->fill($request->all());
         $brand->save();
-        return $this->success(['brand' => $brand], "The brand updated successfully", Response::HTTP_OK);
+        return $this->success(['brand' => new BrandResource($brand)], "The brand updated successfully", Response::HTTP_OK);
     }
 
     /**
@@ -89,6 +90,6 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($brand);
         $brand->delete();
-        return $this->success(['brand' => $brand], "The '{$brand}' brand deleted successfully", Response::HTTP_OK);
+        return $this->success(['brand' => new BrandResource($brand)], "'{$brand->name}' brand deleted successfully", Response::HTTP_OK);
     }
 }
