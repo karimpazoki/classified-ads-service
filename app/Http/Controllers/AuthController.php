@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,7 @@ class AuthController extends Controller
      */
     public function user()
     {
-        return response(auth()->user());
+        return response(new UserResource(auth()->user()));
     }
 
     /**
