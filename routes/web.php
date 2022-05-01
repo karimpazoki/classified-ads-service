@@ -46,3 +46,11 @@ $router->get('/attributes-category/{category}', 'AttributesCategoryController@sh
 $router->put('/attributes-category/{category}', 'AttributesCategoryController@update');
 $router->patch('/attributes-category/{category}', 'AttributesCategoryController@update');
 $router->delete('/attributes-category/{category}', 'AttributesCategoryController@delete');
+
+// Location
+$router->get('/city', 'CityController@index');
+$router->get('/city/{city}', 'CityController@show');
+$router->get('/province', 'ProvinceController@index');
+$router->get('/province/{province}', 'ProvinceController@show');
+$router->get('/country', 'CountryController@index');
+$router->get('/country/{country}', 'CountryController@show');
