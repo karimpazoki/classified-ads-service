@@ -18,4 +18,8 @@ class FieldType extends Model
         'name',
         'has_item'
     ];
+
+    protected $cast = [
+        "has_item" => "boolean"
+    ];
 }
