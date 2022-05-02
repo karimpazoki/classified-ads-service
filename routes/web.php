@@ -58,3 +58,11 @@ $router->get('/country/{country}', 'CountryController@show');
 // Field-types
 $router->get('/field-type', 'FieldTypeController@index');
 $router->get('/field-type/{field_type}', 'FieldTypeController@show');
+
+// Attributes
+$router->get('/attribute', 'AttributeController@index');
+$router->post('/attribute', 'AttributeController@store');
+$router->get('/attribute/{attribute}', 'AttributeController@show');
+$router->put('/attribute/{attribute}', 'AttributeController@update');
+$router->patch('/attribute/{attribute}', 'AttributeController@update');
+$router->delete('/attribute/{attribute}', 'AttributeController@delete');
