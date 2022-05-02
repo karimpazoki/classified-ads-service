@@ -8,6 +8,7 @@ use App\Models\Attribute;
 use App\Traits\ResponseBuilder;
 use App\Models\FieldType;
 use Illuminate\Validation\Rule;
+use App\Http\Resources\AttributeResource;
 use DB;
 
 class AttributeController extends Controller
@@ -30,8 +31,8 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        $attributes = Attribute::with('items')->get();
-        return $this->success(['attributes' => $attributes]);
+        $attributes = Attribute::all();
+        return $this->success(['attributes' => AttributeResource::collection($attributes)]);
     }
 
     /**
@@ -43,8 +44,8 @@ class AttributeController extends Controller
      */
     public function show($attribute)
     {
-        $attribute = Attribute::with('items')->findOrFail($attribute);
-        return $this->success(['attribute' => $attribute]);
+        $attribute = Attribute::findOrFail($attribute);
+        return $this->success(['attribute' => new AttributeResource($attribute)]);
     }
 
     /**
@@ -94,7 +95,7 @@ class AttributeController extends Controller
         }
         DB::commit();
 
-        return $this->success(['attribute' => $attribute->with("items")], "The attribute created successfully", Response::HTTP_CREATED);
+        return $this->success(['attribute' => new AttributeResource($attribute)], "The attribute created successfully", Response::HTTP_CREATED);
     }
 
     /**
@@ -128,6 +129,6 @@ class AttributeController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        return $this->success(['attribute' => $attribute], "'{$attribute->name}' attribute deleted successfully", Response::HTTP_OK);
+        return $this->success(['attribute' => new AttributeResource($attribute)], "'{$attribute->name}' attribute deleted successfully", Response::HTTP_OK);
     }
 }
