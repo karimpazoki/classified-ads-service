@@ -54,3 +54,7 @@ $router->get('/province', 'ProvinceController@index');
 $router->get('/province/{province}', 'ProvinceController@show');
 $router->get('/country', 'CountryController@index');
 $router->get('/country/{country}', 'CountryController@show');
+
+// Field-types
+$router->get('/field-type', 'FieldTypeController@index');
+$router->get('/field-type/{field_type}', 'FieldTypeController@show');
