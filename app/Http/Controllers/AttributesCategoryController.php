@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\AttributesCategory;
 use App\Traits\ResponseBuilder;
+use App\Http\Resources\AttributesCategoryResource;
 
 class AttributesCategoryController extends Controller
 {
@@ -28,9 +29,10 @@ class AttributesCategoryController extends Controller
     public function index()
     {
         $attributes_categories = AttributesCategory::where('parent_id', null)
-            ->with('children')
             ->get();
-        return $this->success(["attributesCategories" => $attributes_categories]);
+        return $this->success([
+            "attributesCategories" => AttributesCategoryResource::collection($attributes_categories),
+        ]);
     }
 
     /**
@@ -40,9 +42,11 @@ class AttributesCategoryController extends Controller
      *
      * @return App\Models\AttributesCategory
      */
-    public function show($attributes_category)
+    public function show($category)
     {
-        return $this->success(["attributesCategory" => AttributesCategory::with('children')->findOrFail($attributes_category)]);
+        return $this->success([
+            "attributesCategory" => new AttributesCategoryResource(AttributesCategory::findOrFail($category)),
+        ]);
     }
 
     /**
@@ -59,7 +63,12 @@ class AttributesCategoryController extends Controller
             'parent_id' => 'integer|exists:attributes_categories,id',
         ]);
 
-        return $this->success(["attributesCategory" => AttributesCategory::create($request->all())], "The attributes category created successfully", Response::HTTP_CREATED);
+        return $this->success([
+                "attributesCategory" => new AttributesCategoryResource(AttributesCategory::create($request->all()))
+            ], 
+            "The attributes category created successfully", 
+            Response::HTTP_CREATED
+        );
     }
 
     /**
@@ -70,17 +79,22 @@ class AttributesCategoryController extends Controller
      *
      * @return App\Models\AttributesCategory
      */
-    public function update(Request $request, $attributes_category)
+    public function update(Request $request, $category)
     {
         $this->validate($request, [
             'name' => 'string|max:255',
             'parent_id' => 'integer|exists:attributes_categories,id',
         ]);
 
-        $attributes_category = AttributesCategory::findOrFail($attributes_category);
+        $attributes_category = AttributesCategory::findOrFail($category);
         $attributes_category->fill($request->all());
         $attributes_category->save();
-        return $this->success(["attributesCategory" => $attributes_category], "The attributes category updated successfully", Response::HTTP_OK);
+        return $this->success([
+                "attributesCategory" => new AttributesCategoryResource($attributes_category)
+            ],
+            "The attributes category updated successfully",
+            Response::HTTP_OK
+        );
     }
 
     /**
@@ -90,10 +104,15 @@ class AttributesCategoryController extends Controller
      *
      * @return App\Models\AttributesCategory
      */
-    public function delete($attributes_category)
+    public function delete($category)
     {
-        $attributes_category = AttributesCategory::findOrFail($attributes_category);
+        $attributes_category = AttributesCategory::findOrFail($category);
         $attributes_category->delete();
-        return $this->success(["attributesCategory" => $attributes_category], "The '{$attributes_category->name}' attributes category deleted successfully", Response::HTTP_OK);
+        return $this->success([
+                "attributesCategory" => new AttributesCategoryResource($attributes_category)
+            ], 
+            "'{$attributes_category->name}' attributes category deleted successfully", 
+            Response::HTTP_OK
+        );
     }
 }
