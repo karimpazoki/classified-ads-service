@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
-    HasMany
+    HasMany,
+    BelongsToMany
 };
 use App\Models\AttributesCategory;
 
@@ -48,10 +49,10 @@ class Category extends Model
     /**
      * Get all of the attributesCategory for the Category
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function attributesCategory(): HasMany
+    public function attributesCategory(): BelongsToMany
     {
-        return $this->hasMany(AttributesCategory::class);
-    }                                       
+        return $this->belongsToMany(AttributesCategory::class);
+    }                 
 }
