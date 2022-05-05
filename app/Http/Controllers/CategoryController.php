@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Models\Category;
 use App\Traits\ResponseBuilder;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\AttributesCategoryResource;
 
 class CategoryController extends Controller
 {
@@ -114,6 +115,24 @@ class CategoryController extends Controller
                 "category" => new CategoryResource($category)
             ], 
             "'{$category->name}' category deleted successfully", 
+            Response::HTTP_OK
+        );
+    }
+
+    public function attachAttributeCategories(Request $request, $category)
+    {
+        $this->validate($request, [
+            'attributes_categories' => 'required|array|min:1',
+            'attributes_categories.*.attributes_category_id' => 'required|integer|exists:attributes_categories,id',
+        ]);
+
+        $category = Category::find($category);
+        $category->attributesCategory()->attach($request->attributes_categories);
+        return $this->success([
+                "category" => new CategoryResource($category),
+                "attributeCategory" => AttributesCategoryResource::collection($category->attributesCategory)
+            ], 
+            "Attributes category Attached to '{$category->name}' category successfully", 
             Response::HTTP_OK
         );
     }

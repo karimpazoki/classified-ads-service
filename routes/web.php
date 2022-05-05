@@ -38,6 +38,7 @@ $router->get('/category/{category}', 'CategoryController@show');
 $router->put('/category/{category}', 'CategoryController@update');
 $router->patch('/category/{category}', 'CategoryController@update');
 $router->delete('/category/{category}', 'CategoryController@delete');
+$router->post('/category/{category}/attributes-category', 'CategoryController@attachAttributeCategories');
 
 //Attributes Categories
 $router->get('/attributes-category', 'AttributesCategoryController@index');
