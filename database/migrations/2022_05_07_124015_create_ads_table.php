@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('category_id');
             $table->foreignId('city_id');
-            $table->json('ad_attributes');
             $table->boolean("is_enable")->default(false);
             $table->boolean("is_confirmed")->default(false);
             $table->timestamps();
