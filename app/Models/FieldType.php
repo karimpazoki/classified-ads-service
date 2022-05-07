@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FieldsType extends Model
+class FieldType extends Model
 {
     use HasFactory;
 
@@ -17,5 +17,9 @@ class FieldsType extends Model
     protected $fillable = [
         'name',
         'has_item'
+    ];
+
+    protected $cast = [
+        "has_item" => "boolean"
     ];
 }

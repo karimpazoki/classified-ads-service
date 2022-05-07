@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{
     BelongsTo,
-    HasMany
+    HasMany,
+    BelongsToMany
 };
+use App\Models\AttributesCategory;
 
 class Category extends Model 
 {
@@ -43,4 +45,14 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
     }
+
+    /**
+     * Get all of the attributesCategory for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function attributesCategory(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributesCategory::class);
+    }                 
 }

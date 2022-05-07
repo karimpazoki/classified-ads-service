@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Category;
 use App\Traits\ResponseBuilder;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\AttributesCategoryResource;
 
 class CategoryController extends Controller
 {
@@ -30,7 +32,7 @@ class CategoryController extends Controller
         $categories = Category::where('parent_id', null)
             ->with('children')
             ->get();
-        return $this->success(["categories" => $categories]);
+        return $this->success(["categories" => CategoryResource::collection($categories)]);
     }
 
     /**
@@ -42,7 +44,12 @@ class CategoryController extends Controller
      */
     public function show($category)
     {
-        return $this->success(["category" => Category::with('children')->findOrFail($category)]);
+        return $this->success([
+            "category" => new CategoryResource(
+                Category::with('children')
+                    ->findOrFail($category)
+            ),
+        ]);
     }
 
     /**
@@ -59,7 +66,12 @@ class CategoryController extends Controller
             'parent_id' => 'integer|exists:categories,id',
         ]);
 
-        return $this->success(["category" => Category::create($request->all())], "The category created successfully", Response::HTTP_CREATED);
+        return $this->success([
+                "category" => new CategoryResource(Category::create($request->all())),
+            ], 
+            "The category created successfully", 
+            Response::HTTP_CREATED
+        );
     }
 
     /**
@@ -80,7 +92,12 @@ class CategoryController extends Controller
         $category = Category::findOrFail($category);
         $category->fill($request->all());
         $category->save();
-        return $this->success(["category" => $category], "The category updated successfully", Response::HTTP_OK);
+        return $this->success([
+                "category" => new CategoryResource($category)
+            ], 
+            "The category updated successfully", 
+            Response::HTTP_OK
+        );
     }
 
     /**
@@ -94,6 +111,29 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($category);
         $category->delete();
-        return $this->success(["category" => $category], "The '{$category->name}' category deleted successfully", Response::HTTP_OK);
+        return $this->success([
+                "category" => new CategoryResource($category)
+            ], 
+            "'{$category->name}' category deleted successfully", 
+            Response::HTTP_OK
+        );
+    }
+
+    public function attachAttributeCategories(Request $request, $category)
+    {
+        $this->validate($request, [
+            'attributes_categories' => 'required|array|min:1',
+            'attributes_categories.*.attributes_category_id' => 'required|integer|exists:attributes_categories,id',
+        ]);
+
+        $category = Category::find($category);
+        $category->attributesCategory()->attach($request->attributes_categories);
+        return $this->success([
+                "category" => new CategoryResource($category),
+                "attributeCategory" => AttributesCategoryResource::collection($category->attributesCategory)
+            ], 
+            "Attributes category Attached to '{$category->name}' category successfully", 
+            Response::HTTP_OK
+        );
     }
 }

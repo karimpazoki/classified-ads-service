@@ -29,4 +29,14 @@ class Attribute extends Model
     {
         return $this->hasMany(AttributeItem::class);
     }
+
+    /**
+     * Get the fieldType that owns the Attribute
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function fieldType()
+    {
+        return $this->belongsTo(FieldType::class);
+    }
 }

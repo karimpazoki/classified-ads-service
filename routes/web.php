@@ -38,6 +38,7 @@ $router->get('/category/{category}', 'CategoryController@show');
 $router->put('/category/{category}', 'CategoryController@update');
 $router->patch('/category/{category}', 'CategoryController@update');
 $router->delete('/category/{category}', 'CategoryController@delete');
+$router->post('/category/{category}/attributes-category', 'CategoryController@attachAttributeCategories');
 
 //Attributes Categories
 $router->get('/attributes-category', 'AttributesCategoryController@index');
@@ -46,3 +47,23 @@ $router->get('/attributes-category/{category}', 'AttributesCategoryController@sh
 $router->put('/attributes-category/{category}', 'AttributesCategoryController@update');
 $router->patch('/attributes-category/{category}', 'AttributesCategoryController@update');
 $router->delete('/attributes-category/{category}', 'AttributesCategoryController@delete');
+
+// Location
+$router->get('/city', 'CityController@index');
+$router->get('/city/{city}', 'CityController@show');
+$router->get('/province', 'ProvinceController@index');
+$router->get('/province/{province}', 'ProvinceController@show');
+$router->get('/country', 'CountryController@index');
+$router->get('/country/{country}', 'CountryController@show');
+
+// Field-types
+$router->get('/field-type', 'FieldTypeController@index');
+$router->get('/field-type/{field_type}', 'FieldTypeController@show');
+
+// Attributes
+$router->get('/attribute', 'AttributeController@index');
+$router->post('/attribute', 'AttributeController@store');
+$router->get('/attribute/{attribute}', 'AttributeController@show');
+$router->put('/attribute/{attribute}', 'AttributeController@update');
+$router->patch('/attribute/{attribute}', 'AttributeController@update');
+$router->delete('/attribute/{attribute}', 'AttributeController@delete');

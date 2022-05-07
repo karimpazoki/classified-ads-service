@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Attribute;
 use App\Traits\ResponseBuilder;
+use App\Models\FieldType;
+use Illuminate\Validation\Rule;
+use App\Http\Resources\AttributeResource;
 use DB;
 
 class AttributeController extends Controller
@@ -28,8 +31,8 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        $attributes = Attribute::with('items')->get();
-        return $this->success(['attributes' => $attributes]);
+        $attributes = Attribute::all();
+        return $this->success(['attributes' => AttributeResource::collection($attributes)]);
     }
 
     /**
@@ -41,8 +44,8 @@ class AttributeController extends Controller
      */
     public function show($attribute)
     {
-        $attribute = Attrribute::with('items')->findOrFail($attribute);
-        return $this->success(['attribute' => $attribute]);
+        $attribute = Attribute::findOrFail($attribute);
+        return $this->success(['attribute' => new AttributeResource($attribute)]);
     }
 
     /**
@@ -54,10 +57,24 @@ class AttributeController extends Controller
      */
     public function store(Request $request)
     {
+        $field_type = FieldType::find($request->field_type);
+        $field_type_has_item = $field_type->has_item;
+
         $this->validate($request,[
-            'name' => 'required|string|max:255|',
-            'field_type' => 'required|integer|exists:id,field_types',
-            'category' => 'required|integer|exists:id,field_types',
+            'name' => 'required|string|max:255',
+            'field_type' => 'required|integer|exists:field_types,id',
+            'category' => 'required|integer|exists:attributes_categories,id',
+            'items' => [
+                Rule::requiredIf($field_type_has_item),
+                'array',
+                'min:2',
+                'max:50',
+            ],
+            'items.*.item' => [
+                Rule::requiredIf($field_type_has_item),
+                'string',
+                'max:255',
+            ],
         ]);
 
         DB::beginTransaction();
@@ -67,15 +84,18 @@ class AttributeController extends Controller
                 "field_type_id" => $request->field_type,
                 "attributes_category_id" => $request->category,
             ]);
-    
-            $field_type_has_item = FieldType::find($field_type)->value('has_item');
+            
+            
             if($field_type_has_item) {
-                $attribute->items()->save($request->items);
+                $attribute->items()->createMany($request->items);
             }
         } catch (\Throwable $th) {
+            DB::rollback();
             throw $th;
         }
-        return $this->success(['attribute' => Attribute::create($request->all())], "The attribute created successfully", Response::HTTP_CREATED);
+        DB::commit();
+
+        return $this->success(['attribute' => new AttributeResource($attribute)], "The attribute created successfully", Response::HTTP_CREATED);
     }
 
     /**
@@ -88,7 +108,7 @@ class AttributeController extends Controller
      */
     public function update(Request $request, $attribute)
     {
-        // update
+        # code
     }
 
     /**
@@ -103,12 +123,12 @@ class AttributeController extends Controller
         DB::beginTransaction();
         try {
             $attribute = Attribute::findOrFail($attribute);
-            $attribute->items->delete();
+            $attribute->items()->delete();
             $attribute->delete();
             DB::commit();
         } catch (\Throwable $th) {
             throw $th;
         }
-        return $this->success(['attribute' => $attribute], "The '{$attribute}' attribute deleted successfully", Response::HTTP_OK);
+        return $this->success(['attribute' => new AttributeResource($attribute)], "'{$attribute->name}' attribute deleted successfully", Response::HTTP_OK);
     }
 }
