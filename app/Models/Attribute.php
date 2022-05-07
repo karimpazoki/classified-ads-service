@@ -39,4 +39,14 @@ class Attribute extends Model
     {
         return $this->belongsTo(FieldType::class);
     }
+
+    /**
+     * The ads that belong to the Attribute
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function ads()
+    {
+        return $this->belongsToMany(Ad::class);
+    }
 }
