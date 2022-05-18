@@ -9,6 +9,7 @@ use App\Traits\ResponseBuilder;
 use App\Http\Resources\AdResource;
 use Auth;
 use App\Models\Attribute;
+use Illuminate\Pagination\Paginator;
 
 class AdController extends Controller
 {
@@ -30,7 +31,11 @@ class AdController extends Controller
      */
     public function index()
     {
-        return $this->success(['ads' => AdResource::collection(Ad::all())]);
+        $currentPage = empty(request()->page) ? 1 : request()->page;
+        Paginator::currentPageResolver(function () use ($currentPage) {
+            return $currentPage;
+        });
+        return $this->success(['ads' => AdResource::collection(Ad::paginate(50))]);
     }
 
     /**
